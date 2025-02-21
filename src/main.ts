@@ -92,6 +92,16 @@ export default class EdgeTTSPlugin extends Plugin {
 				this.readNoteAloud(editor, view);
 			}
 		});
+
+		this.addCommand({
+			id: 'read-clipboard-aloud',
+			name: 'Read from the clipboard',
+			callback: () => this.readClipboardAloud(),
+		});
+
+		this.addRibbonIcon('clipboard-list', 'Read from the clipboard', () => {
+			this.readClipboardAloud();
+		});
 	}
 
 	initializeStatusBar() {
@@ -480,6 +490,69 @@ export default class EdgeTTSPlugin extends Plugin {
 			}
 		} else {
 			if (this.settings.showNotices) new Notice('No text selected or available.');
+		}
+	}
+
+	async readClipboardAloud() {
+		try {
+			const text = await navigator.clipboard.readText();
+			if (!text.trim()) {
+				if (this.settings.showNotices) new Notice('No readable text in clipboard.');
+				return;
+			}
+			if (this.audioContext || this.audioSource) {
+				// Stop any ongoing narration before starting a new one
+				this.stopPlayback();
+			}
+
+			let cleanText = filterMarkdown(filterFrontmatter(text), this.settings.overrideAmpersandEscape);
+
+			if (cleanText.trim()) {
+				try {
+					if (this.settings.showNotices) new Notice('Processing text-to-speech...');
+					this.updateStatusBar(true);
+
+					const tts = new EdgeTTSClient();
+					const voiceToUse = this.settings.customVoice.trim() || this.settings.selectedVoice;
+					await tts.setMetadata(voiceToUse, OUTPUT_FORMAT.WEBM_24KHZ_16BIT_MONO_OPUS);
+
+					const prosodyOptions = new ProsodyOptions();
+					prosodyOptions.rate = this.settings.playbackSpeed;
+
+					const readable = tts.toStream(cleanText, prosodyOptions);
+					this.audioContext = new AudioContext();
+					this.audioSource = this.audioContext.createBufferSource();
+					const audioBuffer: Uint8Array[] = [];
+
+					readable.on('data', (data: Uint8Array) => {
+						audioBuffer.push(data);
+					});
+
+					readable.on('end', async () => {
+						const completeBuffer = new Uint8Array(Buffer.concat(audioBuffer));
+						const audioBufferDecoded = await this.audioContext!.decodeAudioData(completeBuffer.buffer);
+
+						this.audioSource!.buffer = audioBufferDecoded;
+						this.audioSource!.connect(this.audioContext!.destination);
+						this.audioSource!.start(0);
+
+						this.audioSource!.onended = () => {
+							this.cleanupAudioContext();
+							this.updateStatusBar();
+							if (this.settings.showNotices) new Notice('Finished reading aloud.');
+						};
+					});
+				} catch (error) {
+					console.error('Error reading clipboard aloud:', error);
+					this.updateStatusBar();
+					if (this.settings.showNotices) new Notice('Failed to read clipboard aloud.');
+				}
+			} else {
+				if (this.settings.showNotices) new Notice('No readable text after filtering.');
+			}
+		} catch (error) {
+			console.error('Failed to read clipboard:', error);
+			if (this.settings.showNotices) new Notice('Failed to read clipboard.');
 		}
 	}
 
