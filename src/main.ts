@@ -99,9 +99,6 @@ export default class EdgeTTSPlugin extends Plugin {
 			callback: () => this.readClipboardAloud(),
 		});
 
-		this.addRibbonIcon('clipboard-list', 'Read from the clipboard', () => {
-			this.readClipboardAloud();
-		});
 	}
 
 	initializeStatusBar() {
@@ -199,6 +196,10 @@ export default class EdgeTTSPlugin extends Plugin {
 
 		this.ribbonIconEl = this.addRibbonIcon('audio-lines', 'Read note aloud', () => {
 			this.readNoteAloud();
+		});
+
+		this.ribbonIconEl =	this.addRibbonIcon('clipboard-list', 'Read the clipboard', () => {
+			this.readClipboardAloud();
 		});
 	}
 
