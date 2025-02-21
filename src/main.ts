@@ -37,6 +37,11 @@ interface EdgeTTSPluginSettings {
 	replaceSpacesInFilenames: boolean;
 
 	overrideAmpersandEscape: boolean;
+	// 新增设置项：启用 AI 处理 LaTeX表达式
+	enableAIForLatex: boolean;
+	// AI 平台设置
+	BaseUrl: string;
+	ApiKey: string;
 }
 
 const DEFAULT_SETTINGS: EdgeTTSPluginSettings = {
@@ -54,6 +59,10 @@ const DEFAULT_SETTINGS: EdgeTTSPluginSettings = {
 	replaceSpacesInFilenames: false,
 
 	overrideAmpersandEscape: false,
+
+	enableAIForLatex: false,
+	BaseUrl: '',
+	ApiKey: '',
 }
 
 const defaultSelectedTextMp3Name = 'note'
@@ -808,6 +817,44 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 				toggle.setValue(this.plugin.settings.overrideAmpersandEscape);
 				toggle.onChange(async (value) => {
 					this.plugin.settings.overrideAmpersandEscape = value;
+					await this.plugin.saveSettings();
+				});
+			});
+
+		// New setting: Enable AI processing for LaTeX expressions
+		new Setting(containerEl)
+			.setName('Enable AI LaTeX Processing')
+			.setDesc('Use AI to convert LaTeX mathematical expressions into natural language descriptions')
+			.addToggle(toggle => {
+				toggle.setValue(this.plugin.settings.enableAIForLatex);
+				toggle.onChange(async (value) => {
+					this.plugin.settings.enableAIForLatex = value;
+					await this.plugin.saveSettings();
+				});
+			});
+
+		// New setting: OpenAI format compatible base URL
+		new Setting(containerEl)
+			.setName('OpenAI Base URL')
+			.setDesc('Set the OpenAI format compatible base URL for AI model calls.')
+			.addText(text => {
+				text.setPlaceholder('https://api.openai.com');
+				text.setValue(this.plugin.settings.BaseUrl);
+				text.onChange(async (value) => {
+					this.plugin.settings.BaseUrl = value.trim();
+					await this.plugin.saveSettings();
+				});
+			});
+
+		// New setting: OpenAI format compatible API Key
+		new Setting(containerEl)
+			.setName('AI Platform API Key')
+			.setDesc('Set the API Key used to call the AI service.')
+			.addText(text => {
+				text.setPlaceholder('Enter API Key');
+				text.setValue(this.plugin.settings.ApiKey);
+				text.onChange(async (value) => {
+					this.plugin.settings.ApiKey = value.trim();
 					await this.plugin.saveSettings();
 				});
 			});
