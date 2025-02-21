@@ -1,6 +1,7 @@
 import { Plugin, MarkdownView, Notice, PluginSettingTab, Setting, Editor, MarkdownFileInfo, setIcon, setTooltip, TFile, FileSystemAdapter } from 'obsidian';
 import { EdgeTTSClient, OUTPUT_FORMAT, ProsodyOptions } from 'edge-tts-client';
 import { filterFrontmatter, filterMarkdown } from 'src/utils';
+import { aiFilterOptions } from './ai';
 
 import * as path from 'path';
 import * as os from 'os';
@@ -37,11 +38,8 @@ interface EdgeTTSPluginSettings {
 	replaceSpacesInFilenames: boolean;
 
 	overrideAmpersandEscape: boolean;
-	// 新增设置项：启用 AI 处理 LaTeX表达式
-	enableAIForLatex: boolean;
-	// AI 平台设置
-	BaseUrl: string;
-	ApiKey: string;
+
+	aiFilterOptions: aiFilterOptions;
 }
 
 const DEFAULT_SETTINGS: EdgeTTSPluginSettings = {
@@ -60,9 +58,13 @@ const DEFAULT_SETTINGS: EdgeTTSPluginSettings = {
 
 	overrideAmpersandEscape: false,
 
-	enableAIForLatex: false,
-	BaseUrl: '',
-	ApiKey: '',
+	aiFilterOptions: {
+		apiKey: '',
+		baseURL: '',
+		model: '',
+		enableAIForLatex: false,
+	}
+
 }
 
 const defaultSelectedTextMp3Name = 'note'
@@ -220,13 +222,14 @@ export default class EdgeTTSPlugin extends Plugin {
 	}
 
 	async extractFileContent(filePath: string): Promise<string | null> {
+		
 		const file = this.app.vault.getAbstractFileByPath(filePath);
 
 		// Ensure the file is a markdown file
 		if (file instanceof TFile) {
 			try {
 				const content = await this.app.vault.read(file);
-				return content;
+			return content;
 			} catch (error) {
 				console.error('Error reading file content:', error);
 				return null;
@@ -388,7 +391,7 @@ export default class EdgeTTSPlugin extends Plugin {
 		}
 
 		if (selectedText.trim()) {
-			cleanText = filterMarkdown(filterFrontmatter(selectedText), this.settings.overrideAmpersandEscape);
+			cleanText = await filterMarkdown(filterFrontmatter(selectedText), this.settings.overrideAmpersandEscape, this.settings.aiFilterOptions);
 
 			if (cleanText.trim()) {
 				try {
@@ -453,7 +456,7 @@ export default class EdgeTTSPlugin extends Plugin {
 		}
 
 		if (selectedText.trim()) {
-			cleanText = filterMarkdown(filterFrontmatter(selectedText), this.settings.overrideAmpersandEscape);
+			cleanText = await filterMarkdown(filterFrontmatter(selectedText), this.settings.overrideAmpersandEscape, this.settings.aiFilterOptions);
 
 			if (cleanText.trim()) {
 				try {
@@ -515,7 +518,7 @@ export default class EdgeTTSPlugin extends Plugin {
 				this.stopPlayback();
 			}
 
-			let cleanText = filterMarkdown(filterFrontmatter(text), this.settings.overrideAmpersandEscape);
+			let cleanText = await filterMarkdown(filterFrontmatter(text), this.settings.overrideAmpersandEscape, this.settings.aiFilterOptions);
 
 			if (cleanText.trim()) {
 				try {
@@ -826,9 +829,9 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 			.setName('Enable AI LaTeX Processing')
 			.setDesc('Use AI to convert LaTeX mathematical expressions into natural language descriptions')
 			.addToggle(toggle => {
-				toggle.setValue(this.plugin.settings.enableAIForLatex);
+				toggle.setValue(this.plugin.settings.aiFilterOptions.enableAIForLatex);
 				toggle.onChange(async (value) => {
-					this.plugin.settings.enableAIForLatex = value;
+					this.plugin.settings.aiFilterOptions.enableAIForLatex = value;
 					await this.plugin.saveSettings();
 				});
 			});
@@ -839,9 +842,9 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 			.setDesc('Set the OpenAI format compatible base URL for AI model calls.')
 			.addText(text => {
 				text.setPlaceholder('https://api.openai.com');
-				text.setValue(this.plugin.settings.BaseUrl);
+				text.setValue(this.plugin.settings.aiFilterOptions.baseURL);
 				text.onChange(async (value) => {
-					this.plugin.settings.BaseUrl = value.trim();
+					this.plugin.settings.aiFilterOptions.baseURL = value.trim();
 					await this.plugin.saveSettings();
 				});
 			});
@@ -852,9 +855,22 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 			.setDesc('Set the API Key used to call the AI service.')
 			.addText(text => {
 				text.setPlaceholder('Enter API Key');
-				text.setValue(this.plugin.settings.ApiKey);
+				text.setValue(this.plugin.settings.aiFilterOptions.apiKey);
 				text.onChange(async (value) => {
-					this.plugin.settings.ApiKey = value.trim();
+					this.plugin.settings.aiFilterOptions.apiKey = value.trim();
+					await this.plugin.saveSettings();
+				});
+			});
+
+		// New setting: OpenAI format compatible model
+		new Setting(containerEl)
+			.setName('AI Model')
+			.setDesc('Set the AI model to use for processing.')
+			.addText(text => {
+				text.setPlaceholder('llama-3.3-70b-versatile');
+				text.setValue(this.plugin.settings.aiFilterOptions.model);
+				text.onChange(async (value) => {
+					this.plugin.settings.aiFilterOptions.model = value.trim();
 					await this.plugin.saveSettings();
 				});
 			});

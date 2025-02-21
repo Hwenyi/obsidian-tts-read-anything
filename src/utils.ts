@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-useless-escape */
 
+import { aiFilterOptions, removeLaTeX } from "./ai";
+
 /**
  * Filters out the frontmatter from a Markdown text.
  * Frontmatter is defined as a block of YAML enclosed by `---` or `...` at the start of the file.
  * @param text - The Markdown text from which to remove frontmatter.
  * @returns The text without the frontmatter block.
  */
+
+
+
 export function filterFrontmatter(text: string): string {
   // Define the regular expression for frontmatter blocks
   const frontmatterRegex = /^(---|\.\.\.)([\s\S]*?)\1\n?/;
@@ -34,7 +39,7 @@ export function escapeXml(text: string): string {
     .replace(/'/g, '&apos;'); // Escape "'"
 }
 
-export function filterMarkdown(text: string, overrideAmpersandEscape = false): string {
+export async function filterMarkdown(text: string, overrideAmpersandEscape = false, aiFilterOptions : aiFilterOptions):Promise<string>{
   // Remove frontmatter (e.g., YAML between triple dashes "---")
   const noFrontmatter = text.replace(/^-{3}[\s\S]*?-{3}\n?/, '');
 
@@ -44,8 +49,10 @@ export function filterMarkdown(text: string, overrideAmpersandEscape = false): s
   // Remove code blocks (e.g., fenced with ``` or indented by 4 spaces)
   const noCodeBlocks = noUrls.replace(/```[\s\S]*?```/g, '').replace(/^( {4}|\t).+/gm, '');
 
+  const noLaTex = await removeLaTeX(noCodeBlocks, aiFilterOptions);
+
   // Remove inline markdown syntax
-  let cleanedMarkdown = noCodeBlocks
+  let cleanedMarkdown = noLaTex
     // Remove bold (**text** or __text__) and italics (*text* or _text_)
     .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
     .replace(/(\*|_)(.*?)\1/g, '$2')   // Italics
