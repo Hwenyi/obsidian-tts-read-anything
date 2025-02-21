@@ -135,14 +135,14 @@ export default class EdgeTTSPlugin extends Plugin {
 
 		if (withControls) {
 			// Add pause/play button
-			const pausePlayButton = createEl('span', { cls: 'edge-tts-status-bar-control' });
+			const pausePlayButton = createEl('span', { cls: 'read-anything-status-bar-control' });
 			setTooltip(pausePlayButton, this.isPaused ? 'Resume' : 'Pause', { placement: 'top' })
 			setIcon(pausePlayButton, this.isPaused ? 'circle-play' : 'circle-pause');
 			pausePlayButton.onclick = () => (this.isPaused ? this.resumePlayback() : this.pausePlayback());
 			this.statusBarEl.appendChild(pausePlayButton);
 		} else {
 			// Add icon to read note aloud
-			const readAloudStatusBar = createEl('span', { cls: 'edge-tts-status-bar-control' });
+			const readAloudStatusBar = createEl('span', { cls: 'read-anything-status-bar-control' });
 			setTooltip(readAloudStatusBar, 'Read note aloud', { placement: 'top' })
 			setIcon(readAloudStatusBar, 'audio-lines');
 			readAloudStatusBar.onclick = () => this.readNoteAloud();
@@ -634,7 +634,7 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 
 		// Add a text notice about sampling voices
 		const inbetweenInfo = containerEl.createEl('div', {
-			cls: 'edge-tts-info-div'
+			cls: 'read-anything-info-div'
 		})
 
 		const infoText = document.createElement('p');
@@ -794,22 +794,6 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				});
 			});
-
-		const starContainer = containerEl.createEl('div', { cls: 'edge-tts-star-section' });
-		starContainer.createEl('p', {
-			text: 'Please star this project on GitHub if you find it useful ⭐️',
-			cls: 'edge-tts-star-message'
-		});
-
-		starContainer.createEl('a', {
-			text: 'GitHub: Edge TTS Plugin',
-			href: 'https://github.com/travisvn/obsidian-edge-tts',
-			cls: 'external-link',
-			attr: {
-				target: '_blank',
-				rel: 'noopener'
-			}
-		});
 
 		containerEl.createEl('h3', { text: 'Extra Settings' });
 

@@ -10,8 +10,6 @@ import { aiFilterOptions, removeLaTeX } from "./ai";
  * @returns The text without the frontmatter block.
  */
 
-
-
 export function filterFrontmatter(text: string): string {
   // Define the regular expression for frontmatter blocks
   const frontmatterRegex = /^(---|\.\.\.)([\s\S]*?)\1\n?/;
