@@ -60,8 +60,8 @@ const DEFAULT_SETTINGS: EdgeTTSPluginSettings = {
 
 	aiFilterOptions: {
 		apiKey: '',
-		baseURL: '',
-		model: '',
+		baseURL: 'https://api.groq.com/openai/v1',
+		model: 'llama-3.3-70b-versatile',
 		enableAIForLatex: false,
 	}
 
@@ -135,14 +135,14 @@ export default class EdgeTTSPlugin extends Plugin {
 
 		if (withControls) {
 			// Add pause/play button
-			const pausePlayButton = createEl('span', { cls: 'read-anything-status-bar-control' });
+			const pausePlayButton = createEl('span', { cls: 'tts-read-anything-status-bar-control' });
 			setTooltip(pausePlayButton, this.isPaused ? 'Resume' : 'Pause', { placement: 'top' })
 			setIcon(pausePlayButton, this.isPaused ? 'circle-play' : 'circle-pause');
 			pausePlayButton.onclick = () => (this.isPaused ? this.resumePlayback() : this.pausePlayback());
 			this.statusBarEl.appendChild(pausePlayButton);
 		} else {
 			// Add icon to read note aloud
-			const readAloudStatusBar = createEl('span', { cls: 'read-anything-status-bar-control' });
+			const readAloudStatusBar = createEl('span', { cls: 'tts-read-anything-status-bar-control' });
 			setTooltip(readAloudStatusBar, 'Read note aloud', { placement: 'top' })
 			setIcon(readAloudStatusBar, 'audio-lines');
 			readAloudStatusBar.onclick = () => this.readNoteAloud();
@@ -634,7 +634,7 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 
 		// Add a text notice about sampling voices
 		const inbetweenInfo = containerEl.createEl('div', {
-			cls: 'read-anything-info-div'
+			cls: 'tts-read-anything-info-div'
 		})
 
 		const infoText = document.createElement('p');
