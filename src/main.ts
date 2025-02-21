@@ -811,7 +811,7 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 		// New setting: Enable AI processing for LaTeX expressions
 		new Setting(containerEl)
 			.setName('Enable AI LaTeX Processing')
-			.setDesc('Use AI to convert LaTeX mathematical expressions into natural language descriptions')
+			.setDesc('Use AI to convert LaTeX expressions into natural language descriptions')
 			.addToggle(toggle => {
 				toggle.setValue(this.plugin.settings.aiFilterOptions.enableAIForLatex);
 				toggle.onChange(async (value) => {
@@ -823,9 +823,9 @@ class EdgeTTSPluginSettingTab extends PluginSettingTab {
 		// New setting: OpenAI format compatible base URL
 		new Setting(containerEl)
 			.setName('OpenAI Base URL')
-			.setDesc('Set the OpenAI format compatible base URL for AI model calls.')
+			.setDesc('Set the OpenAI format compatible base URL. Must end with /v1.')
 			.addText(text => {
-				text.setPlaceholder('https://api.openai.com');
+				text.setPlaceholder('https://api.openai.com/v1');
 				text.setValue(this.plugin.settings.aiFilterOptions.baseURL);
 				text.onChange(async (value) => {
 					this.plugin.settings.aiFilterOptions.baseURL = value.trim();
