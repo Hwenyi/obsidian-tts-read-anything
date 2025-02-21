@@ -1,6 +1,6 @@
 {
-	"name": "obsidian-edge-tts",
-	"version": "1.9.0",
+	"name": "obsidian-tts-read-anything",
+	"version": "1.0.0",
 	"description": "This is a TTS plugin for Obsidian (https://obsidian.md).",
 	"main": "main.js",
 	"scripts": {
@@ -12,9 +12,11 @@
 		"obsidian-plugin",
 		"TTS",
 		"Text-to-Speech",
-		"Read Aloud"
+		"Read Aloud",
+		"LLM",
+		"AI"
 	],
-	"author": "Travis",
+	"author": "Hwenyi",
 	"license": "GPL-3.0",
 	"devDependencies": {
 		"@types/node": "^16.11.6",

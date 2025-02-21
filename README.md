@@ -1,27 +1,19 @@
-# Obsidian Edge TTS Plugin 🗣️
 
-<p align="center">
-	<a href="https://github.com/travisvn/obsidian-edge-tts">
-		<img src="https://img.shields.io/github/stars/travisvn/obsidian-edge-tts?style=social" alt="GitHub stars"></a>
-	<a href="https://tts.travisvn.com/obsidian" target="_blank">
-    <img src="https://img.shields.io/badge/dynamic/json?logo=obsidian&color=%23483699&label=downloads&query=%24%5B%27edge-tts%27%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json" alt="Obsidian downloads"></a>
-	<a href="https://github.com/travisvn/obsidian-edge-tts/releases">
-		<img src="https://img.shields.io/github/v/release/travisvn/obsidian-edge-tts" alt="GitHub release"></a>
-	<a href="https://github.com/travisvn/obsidian-edge-tts/issues">
-	  <img src="https://img.shields.io/github/issues/travisvn/obsidian-edge-tts" alt="GitHub issues"></a>
-	<img src="https://img.shields.io/github/last-commit/travisvn/obsidian-edge-tts?color=red" alt="GitHub last commit">
-	<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftravisvn%2Fobsidian-edge-tts&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="Hits">
-	<a href="https://discord.gg/GkFbBCBqJ6" target="_blank">
-  <img src="https://img.shields.io/badge/Discord-Voice_AI_%26_TTS_Tools-blue?logo=discord&logoColor=white" alt="Discord">
-</a>
-</p>
+This is a modified version of [obsidian-edge-tts](https://github.com/travisvn/obsidian-edge-tts) to add read-clipboard-aloud and some AI-related features.
 
-<h1 align="center">Free high-quality text-to-speech (narration) in Obsidian</h1>
+# Obsidian TTS Read Anything Plugin 
 
+## Why Fork Instead of PR ?
+
+An issue was created to include clipboard reading as a feature, but the original maintainer felt it did not align with the project’s direction. 
+
+This fork exists to incorporate clipboard support and AI-based rewriting to read LaTeX or explain the code block.
+
+Integrated clipboard reading functionality allows for easier integration with AI plugins like QuickAdd or Text Generator that can write to the clipboard.
 
 ## Overview
 
-The **Obsidian Edge TTS Plugin** is a community plugin for [Obsidian](https://obsidian.md/) that allows you to read your notes aloud using Microsoft's Edge TTS API. It supports a variety of voices and locales, making it an excellent tool for users who want to listen to their notes while multitasking or to improve accessibility.
+The **Obsidian TTS Read Anything Plugin** is a community plugin for [Obsidian](https://obsidian.md/) that allows you to read your notes aloud using Microsoft's Edge TTS API. It supports a variety of voices and locales, making it an excellent tool for users who want to listen to their notes while multitasking or to improve accessibility.
 
 ## Features
 
@@ -32,21 +24,27 @@ The **Obsidian Edge TTS Plugin** is a community plugin for [Obsidian](https://ob
 - Option to generate mp3 file and embed it directly in note
 - Listen to voice samples before selecting a voice (via [tts.travisvn.com](https://tts.travisvn.com))
 
+### Added Features
+
+- Read text directly from the clipboard  
+- AI rewriting of LaTeX formulas before reading aloud
+
 ## Installation
 
 [Install Obsidian plugin](https://tts.travisvn.com/obsidian)
 
 1. Open Obsidian
 2. Go to **Settings** → **Community Plugins**
-3. Search for **Edge TTS**
+3. Search for **TTS Read Anything**
 4. Click **Install** and then **Enable**
 
-Alternatively, you can manually download the latest release from [GitHub Releases](https://github.com/travisvn/obsidian-edge-tts/releases)
+Alternatively, you can manually download the latest release from [GitHub Releases](https://github.com/Hwenyi/obsidian-tts-read-anything/releases)
 
 ## Usage
 
 - Open the note you want to read aloud (or select the text)
 - Use the **Read note aloud** command from the command palette
+- Use the **read-clipboard-aloud** command from the command palette to read clipboard directly
 	- _or_  Click the ribbon icon (if enabled)
 	- _or_  Playback button in the status bar — this both starts a narration and then allows you to pause or resume once it's started
 	- _or_  Right-click on a file and select `Read note aloud`
@@ -66,6 +64,16 @@ To access the plugin settings:
    - **Generate MP3**: Toggle settings related to the `Generate MP3` menu option.
    - **Voice Samples**: Visit [tts.travisvn.com](https://tts.travisvn.com) to sample available voices.
    
-   ![Obsidian Edge TTS Plugin Settings Screenshot](https://utfs.io/f/MMMHiQ1TQaBoUkXv9BIyF8jY32HKoB45tuela0IdhLQ7JTvc)
+### AI-related settings
 
-## If you like this project, please [give it a star on GitHub](https://github.com/travisvn/obsidian-edge-tts) ⭐️
+- **Enable AI LaTeX Processing**: Converts LaTeX expressions into plain text via an AI service  
+- **OpenAI Base URL**: Base endpoint for AI requests  
+- **AI Platform API Key**: API key for the AI provider  
+- **AI Model**: Specific model for text processing 
+
+## License
+
+This fork remains under the terms of [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html). 
+
+
+Special thanks to [travisvn](https://github.com/travisvn), the original project maintainer, for their contributions to Obsidian-Edge-TTS

@@ -1,4 +1,4 @@
-.read-anything-info-div {
+.tts-read-anything-info-div {
 	padding-bottom: 10px;
 	display: flex;
 	flex-direction: column;
@@ -7,7 +7,7 @@
 	text-align: center;
 }
 
-.read-anything-star-section {
+.tts-read-anything-star-section {
 	padding-bottom: 10px;
 	display: flex;
 	flex-direction: column;
@@ -16,11 +16,11 @@
 	text-align: center;
 }
 
-.read-anything-star-message {
+.tts-read-anything-star-message {
 	font-size: x-large;
 }
 
-.read-anything-status-bar-control {
+.tts-read-anything-status-bar-control {
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -29,6 +29,6 @@
 	font-size: 8px;
 }
 
-.read-anything-status-bar-control:hover {
+.tts-read-anything-status-bar-control:hover {
 	color: var(--interactive-accent);
 }
