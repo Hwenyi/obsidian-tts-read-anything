@@ -5,6 +5,8 @@ This is a modified version of [obsidian-edge-tts](https://github.com/travisvn/ob
 
 ## Why Fork Instead of PR ?
 
+In my daily life, I frequently need to read mathematics textbooks that contain numerous LaTeX expressions. Text-to-speech systems often struggle with these mathematical notations. As someone with ADHD, having an audio component helps me maintain focus while reading. This is why I needed clipboard reading functionality - to read processed content that has been converted to a more TTS-friendly format and copied to the clipboard.
+
 An issue was created to include clipboard reading as a feature, but the original maintainer felt it did not align with the project’s direction. 
 
 This fork exists to incorporate clipboard support and AI-based rewriting to read LaTeX or explain the code block.

@@ -3,7 +3,7 @@
 	"name": "TTS Read Anything",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Read notes even including LaTeX and Code aloud.",
+	"description": "Read notes aloud, even including LaTeX or Code, ADHD and Math friendly.",
 	"author": "Hwenyi",
 	"authorUrl": "https://github.com/Hwenyi",
 	"isDesktopOnly": true
