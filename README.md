@@ -15,7 +15,7 @@ Integrated clipboard reading functionality allows for easier integration with AI
 
 ## Overview
 
-The **Obsidian TTS Read Anything Plugin** is a community plugin for [Obsidian](https://obsidian.md/) that allows you to read your notes aloud using Microsoft's Edge TTS API. It supports a variety of voices and locales, making it an excellent tool for users who want to listen to their notes while multitasking or to improve accessibility.
+The **Obsidian TTS Read Anything Plugin** is a community plugin for [Obsidian](https://obsidian.md/) that allows you to read texts that are difficult for traditional TTS to read directly, such as mathematical formulas or code snippets, using AI.
 
 ## Features
 
@@ -56,7 +56,7 @@ Alternatively, you can manually download the latest release from [GitHub Release
 
 To access the plugin settings:
 
-1. Go to **Settings** → **Community Plugins** → **Edge TTS**.
+1. Go to **Settings** → **Community Plugins** → **TTS Read Anything**.
 2. Configure the following options:
    - **Select voice**: Choose from a list of top voices.
    - **Custom voice**: Manually enter a custom voice.
